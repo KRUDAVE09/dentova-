@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
   const profileItems = [
     {
       id: 'profile-view',
-      label: 'Dr. Sarah Jenkins (Lead Dentist)',
+      label: 'Dr. Smith (Lead Dentist)',
       icon: <User className="w-4 h-4" />,
     },
     {
@@ -116,35 +116,37 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
           align="left"
         />
 
-        {/* Chair status pills */}
+        {/* Chair status pills or compact representation */}
         <div className="h-4 w-px bg-stone-300 mx-1" />
         <div className="flex items-center gap-1.5 overflow-x-auto max-w-xs">
-          {clinicConfig.chairs.slice(0, 4).map((chair) => (
-            <button
-              key={chair.id}
-              onClick={() => setActiveChairId(chair.id)}
-              className="focus:outline-none"
-            >
-              <Badge
-                size="sm"
-                variant={
-                  chair.id === activeChair?.id
-                    ? 'teal'
-                    : chair.status === 'occupied'
-                    ? 'danger'
-                    : chair.status === 'available'
-                    ? 'success'
-                    : 'warning'
-                }
+          {clinicConfig.chairs.length <= 4 ? (
+            clinicConfig.chairs.map((chair) => (
+              <button
+                key={chair.id}
+                onClick={() => setActiveChairId(chair.id)}
+                className="focus:outline-none"
               >
-                {chair.name.split(' ')[0]}
-              </Badge>
-            </button>
-          ))}
-          {clinicConfig.chairs.length > 4 && (
-            <span className="text-[10px] text-stone-500 font-bold px-1">
-              +{clinicConfig.chairs.length - 4} more
-            </span>
+                <Badge
+                  size="sm"
+                  variant={
+                    chair.id === activeChair?.id
+                      ? 'teal'
+                      : chair.status === 'occupied'
+                      ? 'danger'
+                      : chair.status === 'available'
+                      ? 'success'
+                      : 'warning'
+                  }
+                >
+                  {chair.name.split(' ')[0]}
+                </Badge>
+              </button>
+            ))
+          ) : (
+            <div className="flex items-center gap-2 pr-2">
+              <Badge variant="teal">Selected: {activeChair?.name || 'None'}</Badge>
+              <span className="text-xs text-stone-500 font-medium whitespace-nowrap">{clinicConfig.chairs.length} Total</span>
+            </div>
           )}
         </div>
       </div>
@@ -191,7 +193,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
                 SJ
               </div>
               <div className="hidden lg:flex flex-col text-left">
-                <span className="text-xs font-bold text-stone-900 leading-tight">Dr. Sarah</span>
+                <span className="text-xs font-bold text-stone-900 leading-tight">Dr. Smith</span>
                 <span className="text-[10px] text-stone-500">Lead Dentist</span>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden lg:block" />
